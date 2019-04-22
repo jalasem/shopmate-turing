@@ -5,13 +5,13 @@ html, * {
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 16px;
   color: $grey;
-  line-height: 150;
+  line-height: 150%;
 }
 
 h1, h2, h3 {
   font-weight: bold;
   color: $dark;
-  line-height: 150;
+  line-height: 150%;
 }
 
 h1 {
@@ -27,4 +27,20 @@ h2 {
 h3 {
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.accent {
+  color: $accent !important;
+}
+.accent-bg {
+  background: $accent;
+}
+
+.page {
+  background: $fair-grey;
+  min-height: 100vh;
 }
