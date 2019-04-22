@@ -13,5 +13,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'arrow-parens': 0,
+    'no-console': 1
   }
 }

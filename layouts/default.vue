@@ -1,8 +1,25 @@
 <template>
   <div>
+    <top-bar />
+    <navigation-bar />
+    <banner />
     <nuxt />
   </div>
 </template>
+
+<script>
+import TopBar from '~/components/partials/topBar.vue'
+import NavigationBar from '~/components/partials/navBar.vue'
+import Banner from '~/components/partials/banner.vue'
+
+export default {
+  components: {
+    TopBar,
+    NavigationBar,
+    Banner
+  }
+}
+</script>
 
 <style>
 html {

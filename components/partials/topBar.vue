@@ -52,7 +52,7 @@
   font-size: 15px;
   line-height: 240%;
   font-family: 'Montserrat', sans-serif;
-  font-weight: bold;
+  font-weight: 600;
   background: $white;
 
   a {
@@ -61,7 +61,7 @@
 
   .links {
     a {
-      padding: 0 .5rem;
+      padding: 0 1.5vw;
     }
   }
 

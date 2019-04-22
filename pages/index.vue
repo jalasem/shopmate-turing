@@ -1,20 +1,43 @@
 <template>
   <div class="page">
-    <top-bar />
   </div>
 </template>
 
-<script>
-import TopBar from '~/components/partials/topBar.vue'
-import NavigationBar from '~/components/partials/navBar.vue'
+<style lang="scss" scoped>
+.page {
+  .banner {
+    z-index: 1;
+    position: relative;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10vh 2vw 5vh;
 
-export default {
-  components: {
-    TopBar,
-    NavigationBar
+    h1, p {
+      color: $white;
+    }
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 200%;
+    }
+
+    button {
+      margin-top: 2rem;
+    }
+
+    img {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }
-</script>
-
-<style lang="scss" scoped>
 </style>
