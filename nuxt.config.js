@@ -14,6 +14,7 @@ export default {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat:600,700|Open+Sans:400,600,700|Playfair+Display:700' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
@@ -21,12 +22,13 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#2E2E2E' },
 
   /*
   ** Global CSS
   */
   css: [
+    '~/assets/scss/main.scss'
   ],
 
   /*
@@ -41,13 +43,19 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/style-resources'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+  },
+
+  styleResources: {
+    // load global scss file to be injected in all vue files
+    scss: './assets/scss/variables.scss'
   },
 
   /*
