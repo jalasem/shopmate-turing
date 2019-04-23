@@ -47,7 +47,7 @@ export default {
 
   .links {
     a {
-      padding: 0 .5rem;
+      padding: 0 1rem;
       font-size: .9rem;
     }
   }

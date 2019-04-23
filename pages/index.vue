@@ -1,43 +1,56 @@
 <template>
   <div class="page">
+    <banner />
+    <products-layout selected-category="" />
   </div>
 </template>
 
-<style lang="scss" scoped>
-.page {
-  .banner {
-    z-index: 1;
-    position: relative;
-    height: 60vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10vh 2vw 5vh;
+<script>
+import Banner from '~/components/partials/banner.vue'
+import ProductsLayout from '~/components/partials/produtcsLayout.vue'
+export default {
+  layout: 'shop',
+  components: {
+    Banner,
+    ProductsLayout
+  },
+  async fetch({ $axios: axios, store, params }) {
+    const { page = 1 } = params
+    try {
+      const { data: categories } = await axios('/categories')
+      const { data: products } = await axios(`/products?page=${page}`)
 
-    h1, p {
-      color: $white;
+      store.commit('metas/setCategories', categories)
+      store.commit('metas/addProducts', products)
+    } catch (err) {
+      console.log({ err })
     }
+  },
+  created() {
+    this.$eventBus.$on('goto-page', payload => {
+      if (this.$route.query.page == payload) return
+      this.gotoPage(payload)
+    })
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('goto-page')
+  },
+  methods: {
+    async gotoPage(page) {
+      try {
+        const { data: products } = await this.$axios(`/products?page=${page}`)
+        this.$store.commit('metas/addProducts', products)
 
-    p {
-      font-size: 1.2rem;
-      font-weight: 600;
-      line-height: 200%;
-    }
-
-    button {
-      margin-top: 2rem;
-    }
-
-    img {
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+        this.$router.push(`${this.$route.path}?page=${page}`)
+      } catch (err) {
+        console.log({ err })
+      }
     }
   }
+}
+</script>
+
+<style lang="scss" scoped>
+.page {
 }
 </style>

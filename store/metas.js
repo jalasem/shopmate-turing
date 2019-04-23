@@ -1,6 +1,7 @@
 export const state = () => ({
   departments: [],
-  categories: {}
+  categories: {},
+  products: {}
 })
 
 export const mutations = {
@@ -15,6 +16,9 @@ export const mutations = {
   },
   emptyCategories(state) {
     state.categories = {}
+  },
+  addProducts(state, products) {
+    state.products = products
   }
 }
 
@@ -30,5 +34,11 @@ export const actions = {
 export const getters = {
   departments(state) {
     return state.departments
+  },
+  categories(state) {
+    return state.categories
+  },
+  products(state) {
+    return state.products
   }
 }

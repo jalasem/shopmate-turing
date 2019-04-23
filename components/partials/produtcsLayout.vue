@@ -1,0 +1,196 @@
+<template>
+  <div class="products-layout">
+    <aside class="categories">
+      <header>
+        <span class="heading">Categories</span>
+      </header>
+      <div v-for="({ category_id, name }) in categories.rows" :key="category_id" class="category" :class="{ active : name === selectedCategory }">
+        <span v-text="name" />
+      </div>
+    </aside>
+    <main class="products">
+      <div class="pagination">
+        <div class="navs">
+          <img class="inactive" src="/svg/left-black.svg" alt="prev">
+          <span v-for="page in parseInt(products.count / 20)" :key="page" :class="{ active: page == currentPage }" @click="$eventBus.$emit(page)" v-text="page" />
+          <img src="/svg/right-black.svg" alt="next">
+        </div>
+      </div>
+      <div class="product-grid">
+        <div v-for="({ name, product_id, thumbnail, price, discounted_price, description }) in products.rows" :key="product_id" class="product">
+          <p class="product-name" v-text="name" />
+          <img :src="`/img/product_images/${thumbnail}`" :alt="name" class="product-image">
+          <div class="product-price">
+            <strike v-if="parseInt(discounted_price)" class="actual-price">
+              {{ price | money }}
+            </strike>
+            <span v-if="parseInt(discounted_price)" class="promo-price">
+              {{ discounted_price | money }}
+            </span>
+            <span v-else class="price">
+              {{ price | money }}
+            </span>
+          </div>
+          <p class="product-description">
+            {{ description | truncate }}
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  filters: {
+    truncate: text => {
+      return (text.length < 100) ? text : text.slice(0, 100) + '...'
+    },
+    money: amount => {
+      return '$' + amount
+    }
+  },
+  props: {
+    selectedCategory: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    currentPage() {
+      const { page } = this.$route.query
+      return page || 1
+    },
+    ...mapGetters({
+      categories: 'metas/categories',
+      products: 'metas/products'
+    })
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.products-layout {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) 9fr;
+  padding: 1.5rem 2vw;
+
+  header {
+    margin-bottom: .5rem;
+    .heading {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $dark;
+      border-bottom: 1px solid $light-grey;
+    }
+  }
+
+  aside {
+    .category {
+      padding: .25rem .25rem;
+
+      span {
+        cursor: pointer;
+        padding: 0 1rem 0 0.25rem;
+      }
+
+      &:hover {
+        span {
+          color: $dark;
+        }
+      }
+
+      &.active {
+        span {
+          color: $accent;
+          border-bottom: 2px solid;
+        }
+      }
+    }
+  }
+
+  .products {
+    .pagination {
+      &, .navs {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      * {
+        cursor: pointer;
+      }
+
+      .navs {
+        span {
+          padding: 0 .5rem;
+        }
+        span.active {
+          background: $accent;
+          color: $white;
+          border-radius: 2px;
+        }
+        img {
+          &:first-child {
+            margin-right: .5rem;
+          }
+          &:last-child {
+            margin-left: .5rem;
+          }
+          &.inactive {
+            filter: grayscale(1) contrast(0);
+          }
+        }
+      }
+    }
+  }
+
+  .product-grid {
+    display: grid;
+    grid-gap: 2vw;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    padding: 1rem 1vw;
+    .product {
+      background: $white;
+      padding: 1rem;
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.197803);
+
+      .product-name {
+        text-align: center;
+      }
+      .product-image {
+        margin: .5rem auto .5rem;
+        display: block;
+        border-radius: 3px;
+      }
+      .product-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .25rem 1rem;
+        font-size: .85rem;
+
+        .actual-price {
+          color: $accent;
+          text-decoration: strkethrough;
+        }
+        .promo-price {
+          background: $accent;
+          color: white;
+          padding: .05rem .5rem;
+          border-radius: 3px;
+        }
+        .price {
+          color: $dark;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      .product-description {
+        font-size: .8rem;
+      }
+    }
+  }
+}
+</style>
