@@ -4,15 +4,22 @@
       <header>
         <span class="heading">Categories</span>
       </header>
-      <div v-for="({ category_id, name }) in categories.rows" :key="category_id" class="category" :class="{ active : name === selectedCategory }">
-        <span v-text="name" />
+      <div v-if="categories.rows">
+        <div v-for="({ category_id, name }) in categories.rows" :key="category_id" class="category" :class="{ active : name === selectedCategory }">
+          <span v-text="name" />
+        </div>
+      </div>
+      <div v-else>
+        <div v-for="({ category_id, name }) in categories" :key="category_id" class="category" :class="{ active : name === selectedCategory }">
+          <span v-text="name" />
+        </div>
       </div>
     </aside>
-    <main class="products">
-      <div class="pagination">
+    <main class="products" v-if="products.count">
+      <div class="pagination" v-if="numOfPages">
         <div class="navs">
           <img class="inactive" src="/svg/left-black.svg" alt="prev">
-          <span v-for="page in parseInt(products.count / 20)" :key="page" :class="{ active: page == currentPage }" @click="$eventBus.$emit(page)" v-text="page" />
+          <span v-for="page in numOfPages" :key="page" :class="{ active: page == currentPage }" @click="gotoPage(page)" v-text="page" />
           <img src="/svg/right-black.svg" alt="next">
         </div>
       </div>
@@ -62,10 +69,22 @@ export default {
       const { page } = this.$route.query
       return page || 1
     },
+    numOfPages() {
+      let total = Math.floor(this.products.count / 20)
+      if (this.products.count % 20) total += 1
+      return total
+    },
     ...mapGetters({
       categories: 'metas/categories',
       products: 'metas/products'
     })
+  },
+  methods: {
+    gotoPage(page) {
+      const { page: current } = this.$route.query
+      if (page === current) return
+      this.$eventBus.$emit('goto-page', page)
+    }
   }
 }
 </script>

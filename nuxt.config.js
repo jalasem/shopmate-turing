@@ -66,6 +66,10 @@ export default {
     // load global scss file to be injected in all vue files
     scss: './assets/scss/variables.scss'
   },
+  router: {
+    // linkExactActiveClass: 'active',
+    linkActiveClass: 'active'
+  },
 
   /*
   ** Build configuration

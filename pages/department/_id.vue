@@ -14,11 +14,13 @@ export default {
     Banner,
     ProductsLayout
   },
-  async fetch({ $axios: axios, store, query }) {
+  async fetch({ $axios: axios, store, params, query }) {
     const { page = 1 } = query
+    const { id } = params
+
     try {
-      const { data: categories } = await axios('/categories')
-      const { data: products } = await axios(`/products?page=${page}`)
+      const { data: categories } = await axios(`/categories/inDepartment/${id}`)
+      const { data: products } = await axios(`/products/inDepartment/${id}/?page=${page}`)
 
       store.commit('metas/setCategories', categories)
       store.commit('metas/addProducts', products)
@@ -37,8 +39,9 @@ export default {
   },
   methods: {
     async gotoPage(page) {
+      const { id } = this.$route.params
       try {
-        const { data: products } = await this.$axios(`/products?page=${page}`)
+        const { data: products } = await this.$axios(`/products/inDepartment/${id}`)
         this.$store.commit('metas/addProducts', products)
 
         this.$router.push(`${this.$route.path}?page=${page}`)

@@ -4,7 +4,13 @@
       SHOPMATE
     </nuxt-link>
     <div class="links">
-      <nuxt-link v-for="({ name, department_id }) in departments" :key="department_id" :to="$route.path" v-text="name" />
+      <nuxt-link
+        v-for="({ name, department_id }) in departments"
+        :key="department_id"
+        :to="`/department/${department_id}`"
+        v-text="name"
+        :class="{ active : $route.params.id === department_id}"
+      />
     </div>
     <form class="search" @submit.prevent>
       <img src="/svg/search-white.svg" alt="search" class="icon">
@@ -49,6 +55,10 @@ export default {
     a {
       padding: 0 1rem;
       font-size: .9rem;
+
+      &.active {
+        color: $accent
+      }
     }
   }
 
