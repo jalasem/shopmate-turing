@@ -44,7 +44,7 @@
   color: $dark;
 }
 .top-bar {
-  height: 48px;
+  height: 40px;
   padding: 0 2vw;
   display: flex;
   justify-content: space-between;

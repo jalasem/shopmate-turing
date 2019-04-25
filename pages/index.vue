@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <banner />
-    <products-layout selected-category="" />
+    <products-layout />
   </div>
 </template>
 

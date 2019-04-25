@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <banner />
-    <products-layout selected-category="" />
+    <products-layout />
   </div>
 </template>
 
@@ -16,11 +16,20 @@ export default {
   },
   async fetch({ $axios: axios, store, params, query }) {
     const { page = 1 } = query
+    const { category } = query
     const { id } = params
+
+    let productsUrl = ''
+
+    if (category) {
+      productsUrl = `/products/inCategory/${category}?page=${page}`
+    } else {
+      productsUrl = `/products/inDepartment/${id}/?page=${page}`
+    }
 
     try {
       const { data: categories } = await axios(`/categories/inDepartment/${id}`)
-      const { data: products } = await axios(`/products/inDepartment/${id}/?page=${page}`)
+      const { data: products } = await axios(productsUrl)
 
       store.commit('metas/setCategories', categories)
       store.commit('metas/addProducts', products)
@@ -33,9 +42,14 @@ export default {
       if (this.$route.query.page == payload) return
       this.gotoPage(payload)
     })
+    this.$eventBus.$on('get-category', payload => {
+      if (this.$route.query.category == payload) return
+      this.getCategory(payload)
+    })
   },
   beforeDestroy() {
     this.$eventBus.$off('goto-page')
+    this.$eventBus.$off('get-category')
   },
   methods: {
     async gotoPage(page) {
@@ -45,6 +59,17 @@ export default {
         this.$store.commit('metas/addProducts', products)
 
         this.$router.push(`${this.$route.path}?page=${page}`)
+      } catch (err) {
+        console.log({ err })
+      }
+    },
+    async getCategory(catId) {
+      const { page = 1 } = this.$route.query
+      try {
+        const { data: products } = await this.$axios(`/products/inCategory/${catId}`)
+
+        this.$store.commit('metas/addProducts', products)
+        this.$router.push(`${this.$route.path}?page=${page}&category=${catId}`)
       } catch (err) {
         console.log({ err })
       }
